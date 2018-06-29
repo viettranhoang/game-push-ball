@@ -13,6 +13,7 @@ SCREEN_HEIGHT = 500
 BALL_SPEED = 3
 SCROLL_BAR_SPEED = 3
 IS_START_GAME = True
+SCORE = 0
 
 
 '''
@@ -88,23 +89,28 @@ def drawObject():
 def collision(posBall, posBar):
     center = [(posBall[0] + posBall[2])/2, (posBall[1] + posBall[3])/2]
     if center[0] <= posBar[2] and center[0] >= posBar[0] :
-        if posBall[3] >= posBar[1] :
+        if posBall[3] >= posBar[1] and posBall[3] <= posBar[3] - 10 :
+            global SCORE
+            SCORE += 1
             return True
     return False
 
 ## restart game when gane over
 def restartGame():
     cans.delete(ALL)
+    global SCORE
+    SCORE = 0
 
 
 ## message box when game over
 def messageBoxGameOver():
-    answer = messagebox.askyesno("Game Over","Play again?")
+    answer = messagebox.askyesno("Play again?", "Score : " + str(SCORE))
     if answer == True:
         restartGame()
-    else :
+    else:
+        global IS_START_GAME
+        IS_START_GAME = False
         messagebox.showinfo("F*ck","Why don't you want to play again?")
-    return answer
         
         
 
@@ -123,7 +129,7 @@ cans.pack()
 '''
 while IS_START_GAME == True:
     drawObject()
-    IS_START_GAME = messageBoxGameOver()
+    messageBoxGameOver()
 
 
                         
